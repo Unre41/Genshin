@@ -13,7 +13,7 @@ table.removeChild(table.children[0])
 
 function openCalc(pers) {
     if (weaponsJSON == undefined) {
-        alert("ЖДИ НЕ ЗАГРУЗИЛОСЬ ЕЩЕ")
+        alert("ЖДИ")
         return
     }
 
@@ -30,7 +30,7 @@ function openCalc(pers) {
     heroSelectedImg.setAttribute("src", 'static/images/characters/full/' + engName + '.png')
     heroSelectedName.innerText = rusName
 
-    attackDMG.innerText = Math.floor(currentChar.atk[96])
+    attackDMG.innerText = Math.floor(currentChar.atk[1])
     weaponDMG.innerText = 0
 
     document.getElementById("container").classList.add("hidden")
@@ -46,6 +46,10 @@ function loadWeapons() {
 
 
     weapons.forEach(weapon => {
+        
+        
+        
+
         if (weaponsJSON[weapon].type != currentChar.weapon) return;
 
         elemToClone.children[0].children[0].setAttribute("src", "static/images/weapons/" + weaponsJSON[weapon].id + ".png")
@@ -78,9 +82,9 @@ function selectWeapon(weap) {
     
     weaponName.innerText = currentWeapon.name
     rangeWeapon.setAttribute('max', currentWeapon.atk.length - 1)
-    rangeWeapon.value = currentWeapon.atk.length - 1
-    weaponDMG.innerText = Math.floor(currentWeapon.atk[currentWeapon.atk.length - 1])
-    rangeWeaponOuter.innerText = currentWeapon.atk.length - 1
+    rangeWeapon.value = 1
+    weaponDMG.innerText = Math.floor(currentWeapon.atk[1])
+    rangeWeaponOuter.innerText = 1
 }
 
 
@@ -131,8 +135,7 @@ range.oninput = function() {
         {rangeOuter.innerText = this.value - 5;}
     else if (this.value > 85 && this.value <= 96)
         {rangeOuter.innerText = this.value - 6;}
-    else {rangeOuter.innerText = this.value};   
-        
+    else {rangeOuter.innerText = this.value}; 
     attackDMG.innerText = Math.floor(currentChar.atk[this.value])
 }
 
@@ -183,10 +186,10 @@ function calcDMG() {
         return;
     }
 
-    var charDamage = parseInt(rangeOuter.value)
-    var weaponDamage = parseInt(rangeWeaponOuter.value)
-    var weaponStatPercent = currentWeapon == undefined ? 0 : currentWeapon.secondary.name == 'atkPercent' ? currentWeapon.secondary.stats[rangeWeaponOuter.innerText] : 0;
-    var charStatPercent = currentChar.statGrow == 'atkPercent' ? currentChar.statGrowList[rangeOuter.innerText] : 0;
+    var charDamage = parseInt(attackDMG.innerText)
+    var weaponDamage = parseInt(weaponDMG.innerText)
+    var weaponStatPercent = currentWeapon == undefined ? 0 : currentWeapon.secondary.name == 'atkPercent' ? currentWeapon.secondary.stats[rangeWeapon.value] : 0;
+    var charStatPercent = currentChar.statGrow == 'atkPercent' ? currentChar.statGrowList[range.value] : 0;
     
     
 
@@ -194,19 +197,16 @@ function calcDMG() {
     document.querySelectorAll('.art-crit').forEach(x => {
         artsCritSum += x.value == '' ? 0 : parseFloat(x.value)
     });
-    //console.log("summa crits arts " + artsCritSum)
 
     var artsAttackSum = 311
     document.querySelectorAll('.art-attack').forEach(x => {
         artsAttackSum += x.value == '' ? 0 : parseFloat(x.value)  
     })
-    //console.log("summa attacks arts " + artsAttackSum)
 
     var artsPercSum = 0
     document.querySelectorAll('.art-perc').forEach(x => {
         artsPercSum += x.value == '' ? 0 : parseFloat(x.value)  
     })
-    //console.log("summa perc arts " + artsPercSum)
 
     
 
@@ -215,8 +215,8 @@ function calcDMG() {
     console.log(summOfStatsPercentageCalculationCritDamagePercentMultipliedByBaseHeroDamegeHeorMultiple)
     
 
-    var weaponStatCrit = currentWeapon == undefined ? 0 : currentWeapon.secondary.name == 'critDamage' ? currentWeapon.secondary.stats[rangeWeaponOuter.innerText] : 0;
-    var charStatCrit = currentChar.statGrow == 'critDamage' ? currentChar.statGrowList[rangeOuter.innerText] : 0;
+    var weaponStatCrit = currentWeapon == undefined ? 0 : currentWeapon.secondary.name == 'critDamage' ? currentWeapon.secondary.stats[rangeWeapon.value] : 0;
+    var charStatCrit = currentChar.statGrow == 'critDamage' ? currentChar.statGrowList[range.value] : 0;
 
     var critSum = 1 + weaponStatCrit + charStatCrit + artsCritSum / 100;
 
@@ -224,25 +224,25 @@ function calcDMG() {
 
     switch (currentChar.statGrow) {
         case 'geoDamageBonus':
-            charStatBonus = currentChar.statGrowList[rangeOuter.innerText];
+            charStatBonus = currentChar.statGrowList[range.value];
             break;
         case 'pyroDamageBonus':
-            charStatBonus = currentChar.statGrowList[rangeOuter.innerText];
+            charStatBonus = currentChar.statGrowList[range.value];
             break;
         case 'electroDamageBonus':
-            charStatBonus = currentChar.statGrowList[rangeOuter.innerText];
+            charStatBonus = currentChar.statGrowList[range.value];
             break;
         case 'anemoDamageBonus':
-            charStatBonus = currentChar.statGrowList[rangeOuter.innerText];
+            charStatBonus = currentChar.statGrowList[range.value];
             break;
         case 'hydroDamageBonus':
-            charStatBonus = currentChar.statGrowList[rangeOuter.innerText];
+            charStatBonus = currentChar.statGrowList[range.value];
             break;
         case 'cryoDamageBonus':
-            charStatBonus = currentChar.statGrowList[rangeOuter.innerText];
+            charStatBonus = currentChar.statGrowList[range.value];
             break;
         case 'physicalDamageBonus':
-            charStatBonus = currentChar.statGrowList[rangeOuter.innerText];
+            charStatBonus = currentChar.statGrowList[range.value];
             break;
         default:
             charStatBonus = 0;
@@ -256,7 +256,7 @@ function calcDMG() {
 
 
 
-    var sum = Math.floor(((charDamage + weaponDamage) * summOfStatsPercentageCalculationCritDamagePercentMultipliedByBaseHeroDamegeHeorMultiple + artsAttackSum) * critSum * charStatBonus)
+    var sum = Math.floor(((charDamage + weaponDamage) * summOfStatsPercentageCalculationCritDamagePercentMultipliedByBaseHeroDamegeHeorMultiple + artsAttackSum) * critSum * charStatBonus * 0.45721925)
     
     
 
