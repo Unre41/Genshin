@@ -46,10 +46,6 @@ function loadWeapons() {
 
 
     weapons.forEach(weapon => {
-        
-        
-        
-
         if (weaponsJSON[weapon].type != currentChar.weapon) return;
 
         elemToClone.children[0].children[0].setAttribute("src", "static/images/weapons/" + weaponsJSON[weapon].id + ".png")
@@ -123,12 +119,37 @@ rangeOuter.innerText = range.value;
 rangeWeaponOuter.innerText = rangeWeapon.value;
 
 range.oninput = function() {
-    rangeOuter.innerText = this.value;
+    if (this.value > 20 && this.value <= 41)
+        {rangeOuter.innerText = this.value - 1;}
+    else if (this.value > 41 && this.value <= 52)
+        {rangeOuter.innerText = this.value - 2;}
+    else if (this.value > 52 && this.value <= 63)
+        {rangeOuter.innerText = this.value - 3;}
+    else if (this.value > 63 && this.value <= 74)
+        {rangeOuter.innerText = this.value - 4;}
+    else if (this.value > 74 && this.value <= 85)
+        {rangeOuter.innerText = this.value - 5;}
+    else if (this.value > 85 && this.value <= 96)
+        {rangeOuter.innerText = this.value - 6;}
+    else {rangeOuter.innerText = this.value};   
+        
     attackDMG.innerText = Math.floor(currentChar.atk[this.value])
 }
 
 rangeWeapon.oninput = function() {
-    rangeWeaponOuter.innerText = this.value;
+    if (this.value > 20 && this.value <= 41)
+        {rangeWeaponOuter.innerText = this.value - 1;}
+    else if (this.value > 41 && this.value <= 52)
+        {rangeWeaponOuter.innerText = this.value - 2;}
+    else if (this.value > 52 && this.value <= 63)
+        {rangeWeaponOuter.innerText = this.value - 3;}
+    else if (this.value > 63 && this.value <= 74)
+        {rangeWeaponOuter.innerText = this.value - 4;}
+    else if (this.value > 74 && this.value <= 85)
+        {rangeWeaponOuter.innerText = this.value - 5;}
+    else if (this.value > 85 && this.value <= 96)
+        {rangeWeaponOuter.innerText = this.value - 6;}
+    else {rangeWeaponOuter.innerText = this.value};
     weaponDMG.innerText = Math.floor(currentWeapon.atk[this.value])
 }
 
@@ -162,8 +183,8 @@ function calcDMG() {
         return;
     }
 
-    var charDamage = parseInt(attackDMG.innerText)
-    var weaponDamage = parseInt(weaponDMG.innerText)
+    var charDamage = parseInt(rangeOuter.value)
+    var weaponDamage = parseInt(rangeWeaponOuter.value)
     var weaponStatPercent = currentWeapon == undefined ? 0 : currentWeapon.secondary.name == 'atkPercent' ? currentWeapon.secondary.stats[rangeWeaponOuter.innerText] : 0;
     var charStatPercent = currentChar.statGrow == 'atkPercent' ? currentChar.statGrowList[rangeOuter.innerText] : 0;
     
